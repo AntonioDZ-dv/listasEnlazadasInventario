@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario - Listas Enlazadas</title>
+</head>
+<body>
+    <div id="contenedor-formulario">
+        <form>
+            <label for="txtCod">
+                Código: <input type="text" id="txtCod">
+            </label>
+            <br><br>
+            <label for="txtNom">
+                Nombre: <input type="text" id="txtNom">
+            </label>
+            <br><br>
+            <label for="txtCant">
+                Cantidad: <input type="number" id="txtCant">
+            </label>
+            <br><br>
+            <label for="txtPrecio">
+                Costo: <input type="number" id="txtPrecio">
+            </label>
+            <br><br>
+            <label for="txtPos">
+                Posición (para insertar): <input type="number" id="txtPos" value="0">
+            </label>
+            <br><br>
+            
+            <button type="button" id="btnAdd">Agregar (Final)</button>
+            <button type="button" id="btnAggIni">Agregar Inicio</button>
+            <button type="button" id="btnInsertar">Insertar en Posición</button>
+            <button type="button" id="btnFin">Buscar</button>
+            <button type="button" id="btnDele">Eliminar</button>
+            <button type="button" id="extPrim">Extraer Primero</button>
+            <button type="button" id="btnList">Listar</button>
+            <button type="button" id="btnListInv">Listar Inverso</button> 
+        </form>
+    </div>
+    
+    <hr>
+    <h3>Detalles de Operaciones:</h3>
+    <div id="detalles"></div>
+
+    <script src="script.js"></script>
+
+    <script>
+        const inv = new Inventario();
+        const divDetalles = document.getElementById("detalles");
+
+        document.getElementById("btnAdd").addEventListener("click", () => {
+            let codigo = document.getElementById("txtCod").value;
+            let nombre = document.getElementById("txtNom").value;
+            let cantidad = Number(document.getElementById("txtCant").value);
+            let precio = Number(document.getElementById("txtPrecio").value);
+            
+            let nuevo = new Producto(codigo, nombre, cantidad, precio);
+            inv.agregar(nuevo);
+            divDetalles.innerHTML += `<div><strong>Se agregó al final:</strong> ${nuevo.infoHtml()}</div>`;
+        });
+
+        document.getElementById("btnAggIni").addEventListener("click", () => {
+            let codigo = document.getElementById("txtCod").value;
+            let nombre = document.getElementById("txtNom").value;
+            let cantidad = Number(document.getElementById("txtCant").value);
+            let precio = Number(document.getElementById("txtPrecio").value);
+            
+            let nuevo = new Producto(codigo, nombre, cantidad, precio);
+            inv.agregarInicio(nuevo);
+            divDetalles.innerHTML += `<div><strong>Se agregó al inicio:</strong> ${nuevo.infoHtml()}</div>`;
+        });
+
+        document.getElementById("btnInsertar").addEventListener("click", () => {
+            let codigo = document.getElementById("txtCod").value;
+            let nombre = document.getElementById("txtNom").value;
+            let cantidad = Number(document.getElementById("txtCant").value);
+            let precio = Number(document.getElementById("txtPrecio").value);
+            let posicion = Number(document.getElementById("txtPos").value);
+            
+            let nuevo = new Producto(codigo, nombre, cantidad, precio);
+            inv.insertar(nuevo, posicion);
+            divDetalles.innerHTML += `<div><strong>Se insertó en la posición ${posicion}:</strong> ${nuevo.infoHtml()}</div>`;
+        });
+
+        document.getElementById("btnFin").addEventListener("click", () => {
+            let codigo = document.getElementById("txtCod").value;
+            let encontrado = inv.buscar(codigo);
+            if (encontrado) {
+                divDetalles.innerHTML += `<div><strong>Producto encontrado:</strong> ${encontrado.infoHtml()}</div>`;
+            } else {
+                divDetalles.innerHTML += `<div><strong>Buscar:</strong> No se encontró el producto con código ${codigo}.</div>`;
+            }
+        });
+
+        document.getElementById("btnDele").addEventListener("click", () => {
+            let codigo = document.getElementById("txtCod").value;
+            let eliminado = inv.eliminar(codigo);
+            if (eliminado) {
+                divDetalles.innerHTML += `<div><strong>Producto eliminado:</strong> ${eliminado.infoHtml()}</div>`;
+            } else {
+                divDetalles.innerHTML += `<div><strong>Eliminar:</strong> No se encontró el producto con código ${codigo}.</div>`;
+            }
+        });
+
+        document.getElementById("extPrim").addEventListener("click", () => {
+            let extraido = inv.extraerPrimero();
+            if (extraido) {
+                divDetalles.innerHTML += `<div><strong>Primer producto extraído:</strong> ${extraido.infoHtml()}</div>`;
+            } else {
+                divDetalles.innerHTML += `<div><strong>Extraer primero:</strong> El inventario está vacío.</div>`;
+            }
+        });
+
+        document.getElementById("btnList").addEventListener("click", () => {
+            let listado = inv.listar();
+            divDetalles.innerHTML += `<div><strong>Listado completo:</strong> <br> ${listado || "Inventario vacío"}</div>`;
+        });
+
+        document.getElementById("btnListInv").addEventListener("click", () => {
+            let listadoInv = inv.listarInverso();
+            divDetalles.innerHTML += `<div><strong>Listado inverso:</strong> <br> ${listadoInv || "Inventario vacío"}</div>`;
+        });
+    </script>
+</body>
+</html>
